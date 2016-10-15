@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>tigorc.ru</title><link href="/" rel="alternate"></link><link href="/feeds/docker.atom.xml" rel="self"></link><id>/</id><updated>2016-10-14T21:00:00+05:00</updated><entry><title>Использование PostgreSQL из под Docker</title><link href="/docker-postgresql.html" rel="alternate"></link><published>2016-10-14T21:00:00+05:00</published><updated>2016-10-14T21:00:00+05:00</updated><author><name>Igor Tokarev</name></author><id>tag:,2016-10-14:docker-postgresql.html</id><summary type="html">&lt;p&gt;Опишу небольшую шпаргалку по использованию PostgreSQL из Docker контейнера.&lt;/p&gt;
+&lt;p&gt;Использовать будем официальный &lt;a href="https://hub.docker.com/r/library/postgres/"&gt;образ&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Скачивание и запуск контейнера:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;docker run --name test-postgres -e &lt;span class="nv"&gt;POSTGRES_PASSWORD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;mysecretpassword -d postgres
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Командой run мы запуска новый контейнер, с помощью параметра --name указываем имя контейнера в данном случае это test-postgres, параметр -e позволяет задать переменные окружения, для данного образа доступно несколько переменных с помощью которых мы можем указать параметры для базы, более подробно на &lt;a href="https://hub.docker.com/r/library/postgres/"&gt;странице&lt;/a&gt; описания образа. И последний параметр -d означает запуск контейнера в фоновом режиме.&lt;/p&gt;
+&lt;p&gt;По умолчанию будет скачиваться последняя версия СУБД, на данный момент это 9.6, но мы можем указать нужную нам версию:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;docker run --name test-postgres -e &lt;span class="nv"&gt;POSTGRES_PASSWORD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;mysecretpassword -d postgres:9.4
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;После запуска контейнера в нем будет запущен PostgreSQL с созданной по умолчанию базой с именем postgres.&lt;/p&gt;
+&lt;p&gt;Далее нам нужно как-то использовать нашу базу, для этого необходимо знать ip адрес, порт, пользователя и пароль.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;docker inspect --format&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}&amp;#39;&lt;/span&gt; test-postgres
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Данной командой мы получаем IP адрес контейнера. Полную информацию по команде inspect можно найти &lt;a href="https://docs.docker.com/engine/reference/commandline/inspect/"&gt;тут&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Порт по умолчанию 5432. Пользователь postgres. Пример настройки базы для django:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;DATABASES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;default&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="s1"&gt;&amp;#39;ENGINE&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;django.db.backends.postgresql_psycopg2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s1"&gt;&amp;#39;NAME&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;postgres&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s1"&gt;&amp;#39;USER&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;postgres&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s1"&gt;&amp;#39;PASSWORD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;mysecretpassword&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s1"&gt;&amp;#39;HOST&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;172.17.0.2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Несколько полезных команд по использованию контейнера.&lt;/h3&gt;
+&lt;p&gt;Остановка контейнера&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;docker stop test-postgres
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Запуск контейнера&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;docker start test-postgres
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Создание дампа&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;docker &lt;span class="nb"&gt;exec&lt;/span&gt; -t test-postgres pg_dumpall -c -U postgres &amp;gt; dump_&lt;span class="sb"&gt;`&lt;/span&gt;date +%d-%m-%Y&lt;span class="s2"&gt;&amp;quot;_&amp;quot;&lt;/span&gt;%H_%M_%S&lt;span class="sb"&gt;`&lt;/span&gt;.sql
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Восстановление дампа:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cat your_dump.sql &lt;span class="p"&gt;|&lt;/span&gt; docker &lt;span class="nb"&gt;exec&lt;/span&gt; -i test-postgres psql -U postgres
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="docker"></category><category term="postgresql"></category></entry></feed>
