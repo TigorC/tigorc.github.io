@@ -6,7 +6,7 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Командой run мы запуска новый контейнер, с помощью параметра --name указываем имя контейнера в данном случае это test-postgres, параметр -e позволяет задать переменные окружения, для данного образа доступно несколько переменных с помощью которых мы можем указать параметры для базы, более подробно на &lt;a href="https://hub.docker.com/r/library/postgres/"&gt;странице&lt;/a&gt; описания образа. И последний параметр -d означает запуск контейнера в фоновом режиме.&lt;/p&gt;
+&lt;p&gt;Командой run мы запускаем новый контейнер, с помощью параметра --name указываем имя контейнера в данном случае это test-postgres, параметр -e позволяет задать переменные окружения, для данного образа доступно несколько переменных с помощью которых мы можем указать параметры для базы, более подробно на &lt;a href="https://hub.docker.com/r/library/postgres/"&gt;странице&lt;/a&gt; описания образа. И последний параметр -d означает запуск контейнера в фоновом режиме.&lt;/p&gt;
 &lt;p&gt;По умолчанию будет скачиваться последняя версия СУБД, на данный момент это 9.6, но мы можем указать нужную нам версию:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;docker run --name test-postgres -e &lt;span class="nv"&gt;POSTGRES_PASSWORD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;mysecretpassword -d postgres:9.4
 &lt;/pre&gt;&lt;/div&gt;
@@ -43,7 +43,7 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Создание дампа&lt;/p&gt;
+&lt;p&gt;Создание дампа всех баз данных&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;docker &lt;span class="nb"&gt;exec&lt;/span&gt; -t test-postgres pg_dumpall -c -U postgres &amp;gt; dump_&lt;span class="sb"&gt;`&lt;/span&gt;date +%d-%m-%Y&lt;span class="s2"&gt;&amp;quot;_&amp;quot;&lt;/span&gt;%H_%M_%S&lt;span class="sb"&gt;`&lt;/span&gt;.sql
 &lt;/pre&gt;&lt;/div&gt;
 

@@ -29,11 +29,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <meta name="author" content="Igor Tokarev" />
-<meta name="description" content="Опишу небольшую шпаргалку по использованию PostgreSQL из Docker контейнера. Использовать будем официальный образ. Скачивание и запуск контейнера: docker run --name test-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres Командой run мы запуска новый контейнер, с помощью параметра --name указываем имя контейнера в данном случае это test-postgres, параметр -e позволяет задать переменные окружения ..." />
+<meta name="description" content="Опишу небольшую шпаргалку по использованию PostgreSQL из Docker контейнера. Использовать будем официальный образ. Скачивание и запуск контейнера: docker run --name test-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres Командой run мы запускаем новый контейнер, с помощью параметра --name указываем имя контейнера в данном случае это test-postgres, параметр -e позволяет задать переменные окружения ..." />
 <meta name="keywords" content="docker, postgresql">
 <meta property="og:site_name" content="tigorc.ru"/>
 <meta property="og:title" content="Использование PostgreSQL из под Docker"/>
-<meta property="og:description" content="Опишу небольшую шпаргалку по использованию PostgreSQL из Docker контейнера. Использовать будем официальный образ. Скачивание и запуск контейнера: docker run --name test-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres Командой run мы запуска новый контейнер, с помощью параметра --name указываем имя контейнера в данном случае это test-postgres, параметр -e позволяет задать переменные окружения ..."/>
+<meta property="og:description" content="Опишу небольшую шпаргалку по использованию PostgreSQL из Docker контейнера. Использовать будем официальный образ. Скачивание и запуск контейнера: docker run --name test-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres Командой run мы запускаем новый контейнер, с помощью параметра --name указываем имя контейнера в данном случае это test-postgres, параметр -e позволяет задать переменные окружения ..."/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:url" content="http://tigorc.ru/docker-postgresql.html"/>
 <meta property="og:type" content="article"/>
@@ -102,7 +102,7 @@
 </pre></div>
 
 
-<p>Командой run мы запуска новый контейнер, с помощью параметра --name указываем имя контейнера в данном случае это test-postgres, параметр -e позволяет задать переменные окружения, для данного образа доступно несколько переменных с помощью которых мы можем указать параметры для базы, более подробно на <a href="https://hub.docker.com/r/library/postgres/">странице</a> описания образа. И последний параметр -d означает запуск контейнера в фоновом режиме.</p>
+<p>Командой run мы запускаем новый контейнер, с помощью параметра --name указываем имя контейнера в данном случае это test-postgres, параметр -e позволяет задать переменные окружения, для данного образа доступно несколько переменных с помощью которых мы можем указать параметры для базы, более подробно на <a href="https://hub.docker.com/r/library/postgres/">странице</a> описания образа. И последний параметр -d означает запуск контейнера в фоновом режиме.</p>
 <p>По умолчанию будет скачиваться последняя версия СУБД, на данный момент это 9.6, но мы можем указать нужную нам версию:</p>
 <div class="highlight"><pre><span></span>docker run --name test-postgres -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>mysecretpassword -d postgres:9.4
 </pre></div>
@@ -139,7 +139,7 @@
 </pre></div>
 
 
-<p>Создание дампа</p>
+<p>Создание дампа всех баз данных</p>
 <div class="highlight"><pre><span></span>docker <span class="nb">exec</span> -t test-postgres pg_dumpall -c -U postgres &gt; dump_<span class="sb">`</span>date +%d-%m-%Y<span class="s2">&quot;_&quot;</span>%H_%M_%S<span class="sb">`</span>.sql
 </pre></div>
 
